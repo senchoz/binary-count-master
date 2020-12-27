@@ -3,6 +3,17 @@
 from random import randint
 from datetime import datetime as dt
 import datetime
+from os import system, name
+
+def clear():
+
+    # for windows
+    if name == 'nt':
+        _ = system('cls')
+
+    # for linux and mac
+    else:
+        _ = system('clear')
 
 def decToBin(x):
     maxNum = 2 ** x - 1

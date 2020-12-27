@@ -7,6 +7,7 @@ from bcm_lib import binToDec
 from bcm_lib import scoreTable
 from bcm_lib import scoreChange
 import sys
+from bcm_lib import clear
 
 # Printing random 
 # print(f"{18:08b}")
@@ -24,6 +25,11 @@ if maxBit:
 else:
     maxBit = 8
 
+clear()
+print(f"Set {maxBit} bit")
+
+f = open("score.log", "a")
+
 roundsPlayed = 0
 #while True:
 while roundsPlayed < roundsToPlay:
@@ -36,6 +42,9 @@ while roundsPlayed < roundsToPlay:
             print("Bin > Dec")
             isCorrect, timeForRound = binToDec(maxBit)
 
+
+        clear()
+
         scoreRound = scoreChange(isCorrect, timeForRound)
         score += scoreRound
         print(f"======")
@@ -45,16 +54,34 @@ while roundsPlayed < roundsToPlay:
         scoreTable(isCorrect, score, gameTime)
         roundsPlayed += 1
 
+
     except KeyboardInterrupt:
         gameEndTime = dt.datetime.now()
-        print(f"\nYou played:\n {gameEndTime - gameStartTime}")
-        print(f"You completed {roundsPlayed} rounds")
-        print(f"and earned {score}")
+        clear()
+        print(f"\nTime played: {gameEndTime - gameStartTime}")
+        print(f"Rounds completed: {roundsPlayed}")
+        print(f"Points earned: {score}")
         print("Good job!")
+
+        f.write(f"Date: {gameEndTime}")
+        f.write(f"\nTime played: {gameEndTime - gameStartTime}\n")
+        f.write(f"Rounds completed: {roundsPlayed}\n")
+        f.write(f"Points earned: {score}\n")
+        f.write(f"{'=' * 32}\n")
+        f.close()
         sys.exit()
 
 gameEndTime = dt.datetime.now()
-print(f"\nYou played:\n {gameEndTime - gameStartTime}")
-print(f"You completed {roundsPlayed} rounds")
-print(f"and earned {score} points")
+clear()
+#print(f"\nYou played:\n {gameEndTime - gameStartTime}")
+print(f"\nTime played: {gameEndTime - gameStartTime}")
+print(f"Rounds completed: {roundsPlayed}")
+print(f"Points earned: {score}")
 print("Good job!")
+
+f.write(f"Date: {gameEndTime}")
+f.write(f"\nTime played: {gameEndTime - gameStartTime}\n")
+f.write(f"Rounds completed: {roundsPlayed}\n")
+f.write(f"Points earned: {score}\n")
+f.write(f"{'=' * 32}\n")
+f.close()
