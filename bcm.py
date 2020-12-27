@@ -1,15 +1,22 @@
 #!/usr/bin/python3
 
 from random import randint
+import datetime as dt
 from bcm_lib import decToBin
 from bcm_lib import binToDec
-
-# Setting random 8-bit number
-# random_number = randint(0, 255)
+from bcm_lib import scoreTable
+from bcm_lib import scoreChange
+import sys
 
 # Printing random 
 # print(f"{18:08b}")
 score = 0
+scoreTotal = 0
+gameTime = 0
+roundTime = dt.timedelta(0)
+gameStartTime = dt.datetime.now()
+roundsToPlay = 10
+
 maxBit = input("Enter numbers size in bits. (Default: 8)\n")
 
 if maxBit:
@@ -17,29 +24,37 @@ if maxBit:
 else:
     maxBit = 8
 
-# print("right!")
-# print("try harder!")
-
+roundsPlayed = 0
 #while True:
-#    binToDec(max_bit)
+while roundsPlayed < roundsToPlay:
+    try:
+        whichType = randint(0, 1)
+        if whichType:
+            print("Dec > Bin")
+            isCorrect, timeForRound = decToBin(maxBit)
+        else:
+            print("Bin > Dec")
+            isCorrect, timeForRound = binToDec(maxBit)
 
-while True:
-    whichType = randint(0, 1)
-#    if binToDec():
-    if whichType:
-        print("Dec > Bin")
-        isCorrect = decToBin(maxBit)
-    else:
-        print("Bin > Dec")
-        isCorrect = binToDec(maxBit)
+        scoreRound = scoreChange(isCorrect, timeForRound)
+        score += scoreRound
+        print(f"======")
+        print(f"+ {scoreRound}!")
+#        score += scoreChange(isCorrect, timeForRound)
+        gameTime += timeForRound
+        scoreTable(isCorrect, score, gameTime)
+        roundsPlayed += 1
 
-    if isCorrect:
-        score += 1
-        cFlag = '+'
-    else:
-        score -= 1
-        cFlag = '-'
+    except KeyboardInterrupt:
+        gameEndTime = dt.datetime.now()
+        print(f"\nYou played:\n {gameEndTime - gameStartTime}")
+        print(f"You completed {roundsPlayed} rounds")
+        print(f"and earned {score}")
+        print("Good job!")
+        sys.exit()
 
-    print("=" * 16)
-    print(f" {cFlag} | Score: {score:02d} |")
-    print("=" * 16)
+gameEndTime = dt.datetime.now()
+print(f"\nYou played:\n {gameEndTime - gameStartTime}")
+print(f"You completed {roundsPlayed} rounds")
+print(f"and earned {score} points")
+print("Good job!")
